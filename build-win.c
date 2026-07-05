@@ -40,8 +40,8 @@ int main(int argc, char ** argv) {
 
   if (pch()) return 1;
 
-  HDR("volk.h", "volk.o", CFLAGS, "-D", "VOLK_IMPLEMENTATION");
-  CC("app-win.c", "app-win.o", CFLAGS);
+  CC("app-win.c", "app-win.o");
+  CC("volk.c", "volk.o");
   if (rc()) return 1;
   if (compile_and_link_exe()) return 1;
 

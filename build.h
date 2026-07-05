@@ -46,15 +46,15 @@ int run(char ** args) {
 }
 #define RUN(...) do { char * args[] = { __VA_ARGS__, 0 }; if (run(args)) return 1; } while (0)
 
-#define CC(src, o, ...) RUN("clang", "-Wall", __VA_ARGS__, "-o", o, "-c", src, "-include-pch", "pch.pch")
-#define HDR(src, o, ...) CC(src, o, "-x", "c", __VA_ARGS__)
+#define CC(src, o, ...) RUN("clang", "-Wall", CFLAGS, __VA_ARGS__, "-o", o, "-c", src, "-include-pch", "pch.pch")
+#define HDR(src, o, d) CC(src, o, "-x", "c", "-D", d)
 
 #define SHADER(src) RUN("glslang", "-V", src, "-o", RES_PATH "/" src ".spv")
 
 static int compile_common() {
-  //CC("src.c", "src.o", CFLAGS);
-  HDR("stb_image.h", "stb_image.o", CFLAGS, "-D", "STB_IMAGE_IMPLEMENTATION");
-  HDR("vlk.h", "vlk.o", CFLAGS, "-D", "VLK_IMPL");
+  //CC("src.c", "src.o");
+  HDR("stb_image.h", "stb_image.o", "STB_IMAGE_IMPLEMENTATION");
+  HDR("vlk.h", "vlk.o", "VLK_IMPL");
   return 0;
 }
 #undef ENG
