@@ -36,8 +36,8 @@ static int link_exe() {
 int main(int argc, char ** argv) {
   if (pch()) return 1;
 
-  CC("app-win.c", "app-win.o");
-  CC("volk.c", "volk.o");
+  CC("app");
+  CC("volk");
   if (shaders()) return 1;
   if (rc()) return 1;
   if (compile_and_link_exe()) return 1;

@@ -39,7 +39,7 @@ int main(int argc, char ** argv) {
   // It's nearly mandatory to use "modules" with ObjC.
   // The compilation speed without it is abismal.
   RUN("clang", "-Wall", "-g", "-fmodules", "-o", "app.o", "-c", "app-osx.m");
-  CC("volk.c", "volk.o");
+  CC("volk");
   if (compile_and_link_exe()) return 1;
   if (shaders()) return 1;
 
