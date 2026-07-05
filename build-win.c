@@ -18,8 +18,7 @@ static int rc() {
 }
 
 static int pch() {
-  RUN("clang", "-Wall", OPT, "-x", "c-header",
-      "-IVulkan-Headers/include",
+  RUN("clang", "-Wall", "-x", "c-header", CFLAGS,
       "-D", "VK_USE_PLATFORM_WIN32_KHR",
       "-D", "VLK_USE_VOLK",
       "-o", "pch.pch", "pch.h");
@@ -42,9 +41,6 @@ int main(int argc, char ** argv) {
   if (shaders()) return 1;
   if (rc()) return 1;
   if (compile_and_link_exe()) return 1;
-
-  //if (cc("shots.c", "shots.o")) return 1;
-  //if (link_shots_exe()) return 1;
 
   return 0;
 }
