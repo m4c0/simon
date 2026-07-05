@@ -53,11 +53,7 @@ int run(char ** args) {
 
 static int compile_common() {
   //CC("src.c", "src.o", CFLAGS);
-  //HDR("gme.h", "gme.o", CFLAGS, "-D", "GME_IMPLEMENTATION");
-  //HDR("sfx.h", "sfx.o", CFLAGS, "-D", "SFX_IMPLEMENTATION");
-  //HDR("snd.h", "snd.o", CFLAGS, "-D", "SND_IMPLEMENTATION");
-  //HDR("snk.h", "snk.o", CFLAGS, "-D", "SNK_IMPLEMENTATION");
-  //HDR("tmr.h", "tmr.o", CFLAGS, "-D", "TMR_IMPLEMENTATION");
+  HDR("stb_image.h", "stb_image.o", CFLAGS, "-D", "STB_IMAGE_IMPLEMENTATION");
   HDR("vlk.h", "vlk.o", CFLAGS, "-D", "VLK_IMPL");
   return 0;
 }
@@ -69,6 +65,6 @@ static int shaders() {
   return 0;
 }
 
-#define OBJS "vlk.o"
+#define OBJS "stb_image.o", "vlk.o"
 
 #endif

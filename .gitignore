@@ -1,5 +1,7 @@
 build-osx
 *.app
 *.dylib
+*.exe
 *.o
 *.pch
+*.res
