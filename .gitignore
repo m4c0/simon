@@ -1,7 +1,12 @@
+app
+build-droid
+build-ios
 build-osx
 *.app
 *.dylib
 *.exe
 *.o
 *.pch
+*.pdb
 *.res
+*.spv

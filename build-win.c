@@ -1,8 +1,7 @@
-//#define OPT "-gdwarf"
-#define OPT "-O3"
+#define OPT "-O3", "-gdwarf"
 
 #define CFLAGS OPT, "-IVulkan-Headers/include"
-#define RES_PATH "app"
+#define RES_PATH "."
 #include "build.h"
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -29,19 +28,18 @@ static int pch() {
 
 static int link_exe() {
   RUN("clang", "-Wall", OPT,
-      "-o", "app/puzzle.exe", "main.res",
+      "-o", "memory.exe", "main.res",
       "app-win.o", "volk.o", OBJS,
       "-ladvapi32", "-lole32", "-lshell32", "-luser32");
   return 0;
 }
 
 int main(int argc, char ** argv) {
-  _mkdir("app");
-
   if (pch()) return 1;
 
   CC("app-win.c", "app-win.o");
   CC("volk.c", "volk.o");
+  if (shaders()) return 1;
   if (rc()) return 1;
   if (compile_and_link_exe()) return 1;
 
