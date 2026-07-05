@@ -22,7 +22,6 @@ extern HWND vlk_hwnd;
 #ifdef VLK_IMPL
 #include "Vulkan-Headers/include/vulkan/vulkan_core.h"
 
-#include "stb_image.h"
 #include "tim.h"
 
 typedef struct vlk_upc_s {

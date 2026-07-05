@@ -53,7 +53,6 @@ int run(char ** args) {
 
 static int compile_common() {
   //CC("src.c", "src.o");
-  HDR("stb_image.h", "stb_image.o", "STB_IMAGE_IMPLEMENTATION");
   HDR("vlk.h", "vlk.o", "VLK_IMPL");
   return 0;
 }
@@ -65,6 +64,6 @@ static int shaders() {
   return 0;
 }
 
-#define OBJS "stb_image.o", "vlk.o"
+#define OBJS "vlk.o"
 
 #endif
