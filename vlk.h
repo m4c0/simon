@@ -598,10 +598,6 @@ static void vlk_record(VkCommandBuffer cb) {
   vlk_pc.aspect_x = a > 1 ? a : 1;
   vlk_pc.aspect_y = a > 1 ? 1 : (1.0 / a);
   vlk_pc.time = tim_now();
-  vlk_pc.anims[0] = 0.5;
-  vlk_pc.anims[1] = 1.0;
-  vlk_pc.anims[2] = 1.0;
-  vlk_pc.anims[3] = 1.0;
 
   vkCmdPushConstants(cb, vlk_pl, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(vlk_upc_t), &vlk_pc);
   vkCmdBindPipeline(cb, VK_PIPELINE_BIND_POINT_GRAPHICS, vlk_ppl);
@@ -694,12 +690,31 @@ void vlk_frame() {
   }
 }
 
+static float vlk_mouse(float p, float a) {
+#ifdef __APPLE__
+  p *= 2;
+#endif
+  p = p * 2 - 1;
+  p *= a;
+  return p;
+}
 void vlk_mouse_move(int x, int y) {
+  float px = vlk_mouse((float)x / (float)vlk_ext.width,  vlk_pc.aspect_x);
+  float py = vlk_mouse((float)y / (float)vlk_ext.height, vlk_pc.aspect_y);
+
+  vlk_pc.anims[0] = (-0.9 < px && px < -0.1 && -0.9 < py && py < -0.1) ? 1 : 0.5;
+  vlk_pc.anims[1] = ( 0.9 > px && px >  0.1 && -0.9 < py && py < -0.1) ? 1 : 0.5;
+  vlk_pc.anims[2] = (-0.9 < px && px < -0.1 &&  0.9 > py && py >  0.1) ? 1 : 0.5;
+  vlk_pc.anims[3] = ( 0.9 > px && px >  0.1 &&  0.9 > py && py >  0.1) ? 1 : 0.5;
 }
 void vlk_mouse_down(int x, int y) {
 }
 
 void vlk_reset() {
+  vlk_pc.anims[0] = 0.5;
+  vlk_pc.anims[1] = 0.5;
+  vlk_pc.anims[2] = 0.5;
+  vlk_pc.anims[3] = 0.5;
 }
 
 void * vlk_headless(int w, int h) {
