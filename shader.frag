@@ -14,15 +14,39 @@ float sd_box(vec2 p, vec2 b) {
   return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
 }
 
+float sd_sqr(vec2 p) {
+  return sd_box(p, vec2(0.3)) - 0.05;
+}
+
+vec4 c_sqr0(vec2 p, float anim) {
+  float d = sd_sqr(p);
+  return vec4(anim, 0, 0, 1 - step(0, d));
+}
+vec4 c_sqr1(vec2 p, float anim) {
+  float d = sd_sqr(p);
+  return vec4(0, anim, 0, 1 - step(0, d));
+}
+vec4 c_sqr2(vec2 p, float anim) {
+  float d = sd_sqr(p);
+  return vec4(0, 0, anim, 1 - step(0, d));
+}
+vec4 c_sqr3(vec2 p, float anim) {
+  float d = sd_sqr(p);
+  return vec4(anim, anim, 0, 1 - step(0, d));
+}
+
 void main() {
   vec2 p = f_pos;
-  p = abs(p) - vec2(0.5);
-  float d = sd_box(p, vec2(0.3)) - 0.05;
 
-  vec3 c = mix(
-      mix(vec3(pc.anims[0], 0, 0), vec3(0, 1, 0), step(0, f_pos.x)),
-      mix(vec3(0, 0, 1), vec3(1, 1, 0), step(0, f_pos.x)),
-      step(0, f_pos.y));
+  vec4 c0 = c_sqr0(p + vec2(-0.5, -0.5), pc.anims.x);
+  vec4 c1 = c_sqr1(p + vec2(+0.5, -0.5), pc.anims.y);
+  vec4 c2 = c_sqr2(p + vec2(-0.5, +0.5), pc.anims.z);
+  vec4 c3 = c_sqr3(p + vec2(+0.5, +0.5), pc.anims.w);
 
-  colour = mix(vec4(c, 1), vec4(0), step(0, d));
+  colour = vec4(
+      c0.rgb * c0.a +
+      c1.rgb * c1.a +
+      c2.rgb * c2.a +
+      c3.rgb * c3.a,
+      c0.a + c1.a + c2.a + c3.a);
 }

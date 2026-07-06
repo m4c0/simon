@@ -599,6 +599,9 @@ static void vlk_record(VkCommandBuffer cb) {
   vlk_pc.aspect_y = a > 1 ? 1 : (1.0 / a);
   vlk_pc.time = tim_now();
   vlk_pc.anims[0] = 0.5;
+  vlk_pc.anims[1] = 1.0;
+  vlk_pc.anims[2] = 1.0;
+  vlk_pc.anims[3] = 1.0;
 
   vkCmdPushConstants(cb, vlk_pl, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(vlk_upc_t), &vlk_pc);
   vkCmdBindPipeline(cb, VK_PIPELINE_BIND_POINT_GRAPHICS, vlk_ppl);
