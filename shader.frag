@@ -38,10 +38,10 @@ vec4 c_sqr3(vec2 p, float anim) {
 void main() {
   vec2 p = f_pos;
 
-  vec4 c0 = c_sqr0(p + vec2(-0.5, -0.5), pc.anims.x);
-  vec4 c1 = c_sqr1(p + vec2(+0.5, -0.5), pc.anims.y);
-  vec4 c2 = c_sqr2(p + vec2(-0.5, +0.5), pc.anims.z);
-  vec4 c3 = c_sqr3(p + vec2(+0.5, +0.5), pc.anims.w);
+  vec4 c0 = c_sqr0(p - vec2(-0.5, -0.5), pc.anims.x);
+  vec4 c1 = c_sqr1(p - vec2(+0.5, -0.5), pc.anims.y);
+  vec4 c2 = c_sqr2(p - vec2(-0.5, +0.5), pc.anims.z);
+  vec4 c3 = c_sqr3(p - vec2(+0.5, +0.5), pc.anims.w);
 
   colour = vec4(
       c0.rgb * c0.a +
