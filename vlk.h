@@ -22,6 +22,7 @@ extern HWND vlk_hwnd;
 #ifdef VLK_IMPL
 #include "Vulkan-Headers/include/vulkan/vulkan_core.h"
 
+#include "gme.h"
 #include "tim.h"
 
 typedef struct vlk_upc_s {
@@ -715,6 +716,7 @@ void vlk_reset() {
   vlk_pc.anims[1] = 0.5;
   vlk_pc.anims[2] = 0.5;
   vlk_pc.anims[3] = 0.5;
+  gme_reset();
 }
 
 void * vlk_headless(int w, int h) {

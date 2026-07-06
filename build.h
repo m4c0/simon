@@ -53,6 +53,7 @@ int run(char ** args) {
 #define SHADER(src) RUN("glslang", "-V", src, "-o", RES_PATH "/" src ".spv")
 
 static int compile_common() {
+  HDR("gme", "GME_IMPL");
   HDR("vlk", "VLK_IMPL");
   return 0;
 }
@@ -64,6 +65,6 @@ static int shaders() {
   return 0;
 }
 
-#define OBJS "vlk.o"
+#define OBJS "gme.o", "vlk.o"
 
 #endif
