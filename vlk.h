@@ -25,8 +25,10 @@ extern HWND vlk_hwnd;
 #include "tim.h"
 
 typedef struct vlk_upc_s {
-  float    aspect_x, aspect_y;
-  float    time;
+  float aspect_x, aspect_y;
+  float time;
+  float _pad;
+  float anims[4];
 } vlk_upc_t;
 static vlk_upc_t vlk_pc;
 
@@ -596,6 +598,7 @@ static void vlk_record(VkCommandBuffer cb) {
   vlk_pc.aspect_x = a > 1 ? a : 1;
   vlk_pc.aspect_y = a > 1 ? 1 : (1.0 / a);
   vlk_pc.time = tim_now();
+  vlk_pc.anims[0] = 0.5;
 
   vkCmdPushConstants(cb, vlk_pl, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(vlk_upc_t), &vlk_pc);
   vkCmdBindPipeline(cb, VK_PIPELINE_BIND_POINT_GRAPHICS, vlk_ppl);

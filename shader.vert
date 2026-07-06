@@ -2,6 +2,8 @@
 
 layout(push_constant) uniform upc {
   vec2 aspect;
+  float time;
+  vec4 anims;
 } pc;
 
 layout(location=0) out vec2 f_pos;

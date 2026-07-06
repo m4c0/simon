@@ -1,5 +1,11 @@
 #version 450
 
+layout(push_constant) uniform upc {
+  vec2 aspect;
+  float time;
+  vec4 anims;
+} pc;
+
 layout(location=0) in vec2 f_pos;
 layout(location=0) out vec4 colour;
 
@@ -14,7 +20,7 @@ void main() {
   float d = sd_box(p, vec2(0.3)) - 0.05;
 
   vec3 c = mix(
-      mix(vec3(1, 0, 0), vec3(0, 1, 0), step(0, f_pos.x)),
+      mix(vec3(pc.anims[0], 0, 0), vec3(0, 1, 0), step(0, f_pos.x)),
       mix(vec3(0, 0, 1), vec3(1, 1, 0), step(0, f_pos.x)),
       step(0, f_pos.y));
 
