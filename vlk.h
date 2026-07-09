@@ -644,6 +644,8 @@ static void vlk_record_cmdbuf(int i) {
 void vlk_frame() {
   if (!vlk_swc.swc) vlk_create_swc();
 
+  gme_tick(vlk_pc.anims);
+
   unsigned inf = vlk_cur_inflight;
 
   _(vkWaitForFences(vlk_dev, 1, vlk_fence + inf, VK_TRUE, ~0UL));
@@ -691,32 +693,28 @@ void vlk_frame() {
   }
 }
 
-static float vlk_mouse(float p, float a) {
-#ifdef __APPLE__
-  p *= 2;
-#endif
-  p = p * 2 - 1;
-  p *= a;
-  return p;
-}
+// static float vlk_mouse(float p, float a) {
+// #ifdef __APPLE__
+//   p *= 2;
+// #endif
+//   p = p * 2 - 1;
+//   p *= a;
+//   return p;
+// }
 void vlk_mouse_move(int x, int y) {
-  float px = vlk_mouse((float)x / (float)vlk_ext.width,  vlk_pc.aspect_x);
-  float py = vlk_mouse((float)y / (float)vlk_ext.height, vlk_pc.aspect_y);
+  //float px = vlk_mouse((float)x / (float)vlk_ext.width,  vlk_pc.aspect_x);
+  //float py = vlk_mouse((float)y / (float)vlk_ext.height, vlk_pc.aspect_y);
 
-  vlk_pc.anims[0] = (-0.9 < px && px < -0.1 && -0.9 < py && py < -0.1) ? 1 : 0.5;
-  vlk_pc.anims[1] = ( 0.9 > px && px >  0.1 && -0.9 < py && py < -0.1) ? 1 : 0.5;
-  vlk_pc.anims[2] = (-0.9 < px && px < -0.1 &&  0.9 > py && py >  0.1) ? 1 : 0.5;
-  vlk_pc.anims[3] = ( 0.9 > px && px >  0.1 &&  0.9 > py && py >  0.1) ? 1 : 0.5;
+  //vlk_pc.anims[0] = (-0.9 < px && px < -0.1 && -0.9 < py && py < -0.1) ? 1 : 0.5;
+  //vlk_pc.anims[1] = ( 0.9 > px && px >  0.1 && -0.9 < py && py < -0.1) ? 1 : 0.5;
+  //vlk_pc.anims[2] = (-0.9 < px && px < -0.1 &&  0.9 > py && py >  0.1) ? 1 : 0.5;
+  //vlk_pc.anims[3] = ( 0.9 > px && px >  0.1 &&  0.9 > py && py >  0.1) ? 1 : 0.5;
 }
 void vlk_mouse_down(int x, int y) {
 }
 
 void vlk_reset() {
-  vlk_pc.anims[0] = 0.5;
-  vlk_pc.anims[1] = 0.5;
-  vlk_pc.anims[2] = 0.5;
-  vlk_pc.anims[3] = 0.5;
-  gme_reset();
+  gme_reset(vlk_pc.anims);
 }
 
 void * vlk_headless(int w, int h) {

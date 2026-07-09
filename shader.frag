@@ -18,21 +18,30 @@ float sd_sqr(vec2 p) {
   return sd_box(p, vec2(0.3)) - 0.05;
 }
 
+float anim_d(float a) {
+  float d = pc.time - a;
+  return 1.0 / abs(d);
+}
+
 vec4 c_sqr0(vec2 p, float anim) {
   float d = sd_sqr(p);
-  return vec4(anim, 0, 0, 1 - step(0, d));
+  float a = anim_d(anim);
+  return vec4(a, 0, 0, 1 - step(0, d));
 }
 vec4 c_sqr1(vec2 p, float anim) {
   float d = sd_sqr(p);
-  return vec4(0, anim, 0, 1 - step(0, d));
+  float a = anim_d(anim);
+  return vec4(0, a, 0, 1 - step(0, d));
 }
 vec4 c_sqr2(vec2 p, float anim) {
   float d = sd_sqr(p);
-  return vec4(0, 0, anim, 1 - step(0, d));
+  float a = anim_d(anim);
+  return vec4(0, 0, a, 1 - step(0, d));
 }
 vec4 c_sqr3(vec2 p, float anim) {
   float d = sd_sqr(p);
-  return vec4(anim, anim, 0, 1 - step(0, d));
+  float a = anim_d(anim);
+  return vec4(a, a, 0, 1 - step(0, d));
 }
 
 void main() {
