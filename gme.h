@@ -29,8 +29,9 @@ void gme_reset(float * anims) {
 }
 
 void gme_tick(float * anims) {
+  if (gme_last_played >= gme_n) return;
+
   float dt = tim_now() - gme_playback;
-  // if (dt > gme_n) return;
   if (dt < 1) return;
 
   int n = gme_seq[gme_last_played];
