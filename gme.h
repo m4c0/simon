@@ -22,7 +22,7 @@ void gme_reset(float * anims) {
     gme_seq[i] = (int)(4.0 * (double)rand() / ((double)RAND_MAX + 1.0));
   }
   gme_n = 1;
-  gme_playback = 0;
+  gme_playback = tim_now() - (1 - 0.5); // start first in 0.5ms
   gme_last_played = 0;
 
   for (int i = 0; i < 4; i++) anims[i] = -1e10;
