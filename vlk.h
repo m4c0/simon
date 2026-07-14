@@ -707,6 +707,10 @@ void vlk_mouse_move(int x, int y) {
   gme_mouse_move(px, py);
 }
 void vlk_mouse_down(int x, int y) {
+  float px = vlk_mouse((float)x / (float)vlk_ext.width,  vlk_pc.aspect_x);
+  float py = vlk_mouse((float)y / (float)vlk_ext.height, vlk_pc.aspect_y);
+  gme_mouse_move(px, py);
+  gme_mouse_down();
 }
 
 void vlk_reset() {

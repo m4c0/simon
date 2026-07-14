@@ -5,6 +5,7 @@ void gme_reset(float * anims);
 void gme_tick(float * anims);
 
 void gme_mouse_move(float px, float py);
+void gme_mouse_down();
 
 #ifdef GME_IMPL
 
@@ -61,6 +62,15 @@ void gme_mouse_move(float px, float py) {
       gme_hover = 3;
     }
   }
+}
+
+void gme_mouse_down() {
+  if (gme_last_played < gme_n) return;
+  if (gme_hover == -1) return;
+
+  gme_n++;
+  gme_playback = tim_now() - (1 - 0.5); // start first in 0.5ms
+  gme_hover = -1;
 }
 
 #endif
