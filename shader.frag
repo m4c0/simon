@@ -20,7 +20,7 @@ float sd_sqr(vec2 p) {
 
 float anim_d(float a) {
   float d = pc.time - a;
-  return 1.0 / abs(d);
+  return 0.1 / abs(d);
 }
 
 vec4 c_sqr0(vec2 p, float anim) {
