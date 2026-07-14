@@ -693,22 +693,18 @@ void vlk_frame() {
   }
 }
 
-// static float vlk_mouse(float p, float a) {
-// #ifdef __APPLE__
-//   p *= 2;
-// #endif
-//   p = p * 2 - 1;
-//   p *= a;
-//   return p;
-// }
+static float vlk_mouse(float p, float a) {
+#ifdef __APPLE__
+  p *= 2;
+#endif
+  p = p * 2 - 1;
+  p *= a;
+  return p;
+}
 void vlk_mouse_move(int x, int y) {
-  //float px = vlk_mouse((float)x / (float)vlk_ext.width,  vlk_pc.aspect_x);
-  //float py = vlk_mouse((float)y / (float)vlk_ext.height, vlk_pc.aspect_y);
-
-  //vlk_pc.anims[0] = (-0.9 < px && px < -0.1 && -0.9 < py && py < -0.1) ? 1 : 0.5;
-  //vlk_pc.anims[1] = ( 0.9 > px && px >  0.1 && -0.9 < py && py < -0.1) ? 1 : 0.5;
-  //vlk_pc.anims[2] = (-0.9 < px && px < -0.1 &&  0.9 > py && py >  0.1) ? 1 : 0.5;
-  //vlk_pc.anims[3] = ( 0.9 > px && px >  0.1 &&  0.9 > py && py >  0.1) ? 1 : 0.5;
+  float px = vlk_mouse((float)x / (float)vlk_ext.width,  vlk_pc.aspect_x);
+  float py = vlk_mouse((float)y / (float)vlk_ext.height, vlk_pc.aspect_y);
+  gme_mouse_move(px, py);
 }
 void vlk_mouse_down(int x, int y) {
 }

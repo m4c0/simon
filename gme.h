@@ -4,6 +4,8 @@
 void gme_reset(float * anims);
 void gme_tick(float * anims);
 
+void gme_mouse_move(float px, float py);
+
 #ifdef GME_IMPL
 
 #include <stdlib.h>
@@ -15,6 +17,7 @@ static int gme_seq[GME_SEQ_SIZE];
 static int gme_n;
 static int gme_last_played;
 static float gme_playback;
+static int gme_hover;
 
 void gme_reset(float * anims) {
   srand(time(NULL));
@@ -24,21 +27,40 @@ void gme_reset(float * anims) {
   gme_n = 1;
   gme_playback = tim_now() - (1 - 0.5); // start first in 0.5ms
   gme_last_played = 0;
+  gme_hover = -1;
 
   for (int i = 0; i < 4; i++) anims[i] = -1e10;
 }
 
 void gme_tick(float * anims) {
-  if (gme_last_played >= gme_n) return;
+  if (gme_last_played >= gme_n) {
+    if (gme_hover >= 0) anims[gme_hover] = tim_now();
+    return;
+  }
 
   float dt = tim_now() - gme_playback;
   if (dt < 1) return;
 
-  int n = gme_seq[gme_last_played];
-  for (int i = 0; i < 4; i++) anims[i] = -1e10;
-  anims[n] = tim_now();
+  anims[gme_seq[gme_last_played]] = tim_now();
   gme_last_played++;
   gme_playback = tim_now();
+}
+
+void gme_mouse_move(float px, float py) {
+  gme_hover = -1;
+  if (-0.9 < px && px < -0.1) {
+    if (-0.9 < py && py < -0.1) {
+      gme_hover = 0;
+    } else if (0.9 > py && py > 0.1) {
+      gme_hover = 2;
+    }
+  } else if (0.9 > px && px > 0.1) {
+    if (-0.9 < py && py < -0.1) {
+      gme_hover = 1;
+    } else if (0.9 > py && py > 0.1) {
+      gme_hover = 3;
+    }
+  }
 }
 
 #endif
