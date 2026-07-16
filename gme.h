@@ -18,7 +18,9 @@ static int gme_seq[GME_SEQ_SIZE];
 static int gme_n;
 static int gme_last_played;
 static float gme_playback;
+
 static int gme_hover;
+static int gme_click;
 
 void gme_reset(float * anims) {
   srand(time(NULL));
@@ -34,6 +36,9 @@ void gme_reset(float * anims) {
 }
 
 void gme_tick(float * anims) {
+  int clicked = gme_click;
+  gme_click = 0;
+
   if (gme_last_played >= gme_n) {
     if (gme_hover >= 0) anims[gme_hover] = tim_now();
     return;
@@ -65,12 +70,12 @@ void gme_mouse_move(float px, float py) {
 }
 
 void gme_mouse_down() {
-  if (gme_last_played < gme_n) return;
-  if (gme_hover == -1) return;
-
-  gme_n++;
-  gme_playback = tim_now() - (1 - 0.5); // start first in 0.5ms
-  gme_hover = -1;
+  gme_click = 1;
+  // if (gme_last_played < gme_n) return;
+  // if (gme_hover == -1) return;
+  // gme_n++;
+  // gme_playback = tim_now() - (1 - 0.5); // start first in 0.5ms
+  // gme_hover = -1;
 }
 
 #endif
