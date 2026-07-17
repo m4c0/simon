@@ -90,9 +90,6 @@ void gme_tick(float * anims) {
   gme_last_clicked++;
   if (gme_last_clicked < gme_streak) return;
 
-  // TODO: add a delay after clicking
-  // TODO: add a larger delay after completing
-
   gme_streak++;
   gme_hover = -1;
   gme_replaying = 1;
