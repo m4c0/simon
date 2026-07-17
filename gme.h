@@ -19,6 +19,7 @@ static int gme_streak;
 
 static int gme_replaying;
 static int gme_last_played;
+static int gme_last_clicked;
 static float gme_playback;
 
 static int gme_hover;
@@ -31,6 +32,7 @@ void gme_reset(float * anims) {
   }
   gme_streak = 1;
   gme_playback = tim_now() - (1 - 0.5); // start first in 0.5ms
+  gme_last_clicked = 0;
   gme_last_played = 0;
   gme_hover = -1;
   gme_click = 0;
@@ -40,11 +42,12 @@ void gme_reset(float * anims) {
 }
 
 void gme_tick(float * anims) {
-  // int clicked = gme_click;
+  int clicked = gme_click;
   gme_click = 0;
 
   if (gme_replaying) {
     if (gme_last_played >= gme_streak) {
+      gme_last_clicked = 0;
       gme_replaying = 0;
       return;
     }
@@ -58,14 +61,26 @@ void gme_tick(float * anims) {
     return;
   } 
 
-  if (gme_hover >= 0) anims[gme_hover] = tim_now();
+  if (gme_hover == -1) return;
 
-  // if (gme_last_played < gme_streak) return;
-  // if (gme_hover == -1) return;
-  // gme_streak++;
-  // gme_playback = tim_now() - (1 - 0.5); // start first in 0.5ms
-  // gme_hover = -1;
+  anims[gme_hover] = tim_now();
+
+  if (!clicked) return;
+
+  if (gme_seq[gme_last_clicked] != gme_hover) {
+    // TODO: game over
+    gme_reset(anims);
+    return;
   }
+
+  gme_last_clicked++;
+  if (gme_last_clicked < gme_streak) return;
+
+  gme_streak++;
+  gme_playback = tim_now() - (1 - 0.5); // start first in 0.5ms
+  gme_hover = -1;
+  gme_replaying = 1;
+  gme_last_played = 0;
 }
 
 void gme_mouse_move(float px, float py) {
