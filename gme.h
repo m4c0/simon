@@ -4,6 +4,8 @@
 void gme_reset(float * anims);
 void gme_tick(float * anims);
 
+int gme_is_playback();
+
 void gme_mouse_move(float px, float py);
 void gme_mouse_down();
 
@@ -25,7 +27,11 @@ static float gme_timer;
 static int gme_hover;
 static int gme_click;
 
-void gme_set_timer(float t) {
+int gme_is_playback() {
+  return gme_replaying;
+}
+
+static void gme_set_timer(float t) {
   gme_timer = tim_now() + t;
 }
 

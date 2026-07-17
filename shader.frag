@@ -3,6 +3,7 @@
 layout(push_constant) uniform upc {
   vec2 aspect;
   float time;
+  float playback;
   vec4 anims;
 } pc;
 
@@ -46,16 +47,19 @@ vec4 c_sqr3(vec2 p, float anim) {
 
 void main() {
   vec2 p = f_pos;
+  
+  vec3 bg = pc.playback > 0 ? vec3(0.1) : vec3(0.2);
 
   vec4 c0 = c_sqr0(p - vec2(-0.5, -0.5), pc.anims.x);
   vec4 c1 = c_sqr1(p - vec2(+0.5, -0.5), pc.anims.y);
   vec4 c2 = c_sqr2(p - vec2(-0.5, +0.5), pc.anims.z);
   vec4 c3 = c_sqr3(p - vec2(+0.5, +0.5), pc.anims.w);
-
-  colour = vec4(
+  vec4 c = vec4(
       c0.rgb * c0.a +
       c1.rgb * c1.a +
       c2.rgb * c2.a +
       c3.rgb * c3.a,
       c0.a + c1.a + c2.a + c3.a);
+
+  colour = vec4(mix(bg, c.rgb, c.a), 1);
 }

@@ -28,7 +28,7 @@ extern HWND vlk_hwnd;
 typedef struct vlk_upc_s {
   float aspect_x, aspect_y;
   float time;
-  float _pad;
+  float playback;
   float anims[4];
 } vlk_upc_t;
 static vlk_upc_t vlk_pc;
@@ -645,6 +645,7 @@ void vlk_frame() {
   if (!vlk_swc.swc) vlk_create_swc();
 
   gme_tick(vlk_pc.anims);
+  vlk_pc.playback = gme_is_playback();
 
   unsigned inf = vlk_cur_inflight;
 
