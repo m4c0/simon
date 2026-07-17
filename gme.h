@@ -68,9 +68,11 @@ void gme_tick(float * anims) {
 
   if (gme_hover == -1) return;
 
-  anims[gme_hover] = tim_now();
+  anims[gme_hover] = tim_now() - 0.15;
 
   if (!clicked) return;
+
+  anims[gme_hover] = tim_now();
 
   if (gme_seq[gme_last_clicked] != gme_hover) {
     // TODO: game over
