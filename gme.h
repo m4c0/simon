@@ -2,17 +2,18 @@
 #define GME_H
 
 typedef struct gme_state_s {
+  float anims[4];
   int gameover;
   int playback;
 } gme_state_t;
 
-void gme_reset(float * anims);
-void gme_tick(float * anims);
-
 const gme_state_t * gme_state();
 
+void gme_reset(void);
+void gme_tick(void);
+
 void gme_mouse_move(float px, float py);
-void gme_mouse_down();
+void gme_mouse_down(void);
 
 #ifdef GME_IMPL
 
@@ -36,7 +37,7 @@ static void gme_set_timer(float t) {
   gme_timer = tim_now() + t;
 }
 
-void gme_reset(float * anims) {
+void gme_reset(void) {
   srand(time(NULL));
   for (int i = 0; i < GME_SEQ_SIZE; i++) {
     gme_seq[i] = (int)(4.0 * (double)rand() / ((double)RAND_MAX + 1.0));
@@ -51,11 +52,10 @@ void gme_reset(float * anims) {
 
   gme_set_timer(0.5);
 
-  for (int i = 0; i < 4; i++) anims[i] = -1e10;
+  for (int i = 0; i < 4; i++) gme_st.anims[i] = -1e10;
 }
 
-// TODO: add sounds
-void gme_tick(float * anims) {
+void gme_tick(void) {
   int clicked = gme_click;
   gme_click = 0;
 
@@ -70,7 +70,7 @@ void gme_tick(float * anims) {
       return;
     }
 
-    anims[gme_seq[gme_last_played]] = tim_now();
+    gme_st.anims[gme_seq[gme_last_played]] = tim_now();
     gme_last_played++;
     gme_set_timer(1.0);
     return;
@@ -78,14 +78,13 @@ void gme_tick(float * anims) {
 
   if (gme_hover == -1) return;
 
-  anims[gme_hover] = tim_now() - 0.15;
+  gme_st.anims[gme_hover] = tim_now() - 0.15;
 
   if (!clicked) return;
 
-  anims[gme_hover] = tim_now();
+  gme_st.anims[gme_hover] = tim_now();
 
   if (gme_seq[gme_last_clicked] != gme_hover) {
-    gme_reset(anims);
     gme_st.gameover = 1;
     return;
   }

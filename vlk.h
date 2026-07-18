@@ -652,11 +652,13 @@ static void vlk_record_cmdbuf(int i) {
 void vlk_frame() {
   if (!vlk_swc.swc) vlk_create_swc();
 
-  gme_tick(vlk_pc.anims);
+  gme_tick();
 
   const gme_state_t * gme = gme_state();
   vlk_pc.playback = gme->playback;
   vlk_pc.gameover = gme->gameover;
+
+  for (int i = 0; i < 4; i++) vlk_pc.anims[i] = gme->anims[i];
 
   unsigned inf = vlk_cur_inflight;
 
@@ -726,7 +728,7 @@ void vlk_mouse_down(int x, int y) {
 }
 
 void vlk_reset() {
-  gme_reset(vlk_pc.anims);
+  gme_reset();
 }
 
 void * vlk_headless(int w, int h) {
