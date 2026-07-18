@@ -33,7 +33,7 @@ void sfx_filler(float * buf, unsigned sz) {
 
     float v = 0;
     for (int i = 0; i < 4; i++) {
-      float dt = t - gme->anims[i];
+      float dt = t - gme->clicks[i];
       float f = sfx_freqs[i];
       v += sfx_env(dt) * sin(t * f * 6.28f);
     }

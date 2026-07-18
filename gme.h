@@ -3,6 +3,7 @@
 
 typedef struct gme_state_s {
   float anims[4];
+  float clicks[4];
   float gameover;
   int playback;
 } gme_state_t;
@@ -52,7 +53,7 @@ void gme_reset(void) {
 
   gme_set_timer(0.5);
 
-  for (int i = 0; i < 4; i++) gme_st.anims[i] = -1e10;
+  for (int i = 0; i < 4; i++) gme_st.anims[i] = gme_st.clicks[i] = -1e10;
 }
 
 void gme_tick(void) {
@@ -70,7 +71,8 @@ void gme_tick(void) {
       return;
     }
 
-    gme_st.anims[gme_seq[gme_last_played]] = tim_now();
+    int n = gme_seq[gme_last_played];
+    gme_st.anims[n] = gme_st.clicks[n] = tim_now();
     gme_last_played++;
     gme_set_timer(1.0);
     return;
@@ -82,7 +84,7 @@ void gme_tick(void) {
 
   if (!clicked) return;
 
-  gme_st.anims[gme_hover] = tim_now();
+  gme_st.anims[gme_hover] = gme_st.clicks[gme_hover] = tim_now();
 
   if (gme_seq[gme_last_clicked] != gme_hover) {
     gme_st.gameover = tim_now();
