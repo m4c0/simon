@@ -4,6 +4,7 @@
 void gme_reset(float * anims);
 void gme_tick(float * anims);
 
+int gme_is_over();
 int gme_is_playback();
 
 void gme_mouse_move(float px, float py);
@@ -18,9 +19,10 @@ void gme_mouse_down();
 static int gme_seq[GME_SEQ_SIZE];
 static int gme_streak;
 
-static int gme_replaying;
+static int gme_gameover;
 static int gme_last_played;
 static int gme_last_clicked;
+static int gme_replaying;
 static float gme_timer;
 
 static int gme_hover;
@@ -45,6 +47,7 @@ void gme_reset(float * anims) {
   gme_hover = -1;
   gme_click = 0;
   gme_replaying = 1;
+  gme_gameover = 0;
 
   gme_set_timer(0.5);
 
@@ -55,6 +58,8 @@ void gme_reset(float * anims) {
 void gme_tick(float * anims) {
   int clicked = gme_click;
   gme_click = 0;
+
+  if (gme_gameover) return;
 
   if (gme_timer > tim_now()) return;
 
@@ -80,9 +85,8 @@ void gme_tick(float * anims) {
   anims[gme_hover] = tim_now();
 
   if (gme_seq[gme_last_clicked] != gme_hover) {
-    // TODO: game over
     gme_reset(anims);
-    gme_set_timer(2);
+    gme_gameover = 1;
     return;
   }
 
