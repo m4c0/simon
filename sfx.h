@@ -23,6 +23,7 @@ static float sfx_env(float ssp) {
   return 0;
 }
 
+static const float sfx_freqs[] = { 440.f, 523.25f, 392.f, 329.63f };
 static int sfx_smp = 0;
 void sfx_filler(float * buf, unsigned sz) {
   const gme_state_t * gme = gme_state();
@@ -33,7 +34,8 @@ void sfx_filler(float * buf, unsigned sz) {
     float v = 0;
     for (int i = 0; i < 4; i++) {
       float dt = t - gme->anims[i];
-      v += sfx_env(dt) * sin(t * 440.f * 6.28f);
+      float f = sfx_freqs[i];
+      v += sfx_env(dt) * sin(t * f * 6.28f);
     }
     buf[i] = 0.25f * v;
   }
