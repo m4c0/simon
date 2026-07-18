@@ -22,8 +22,7 @@ float sfx_sqr(unsigned ssp) {
   return ((ssp / d) % 2);
 }
 
-void sfx_filler(float * buf, unsigned sz) {
-  int ssp = sp;
+static float sfx_env(float ssp, float f) {
   float mult;
   if (ssp < 1000) {
     mult = ssp / 1000.0f;
@@ -34,8 +33,13 @@ void sfx_filler(float * buf, unsigned sz) {
   } else {
     mult = 0;
   }
+  return f * mult;
+}
+
+void sfx_filler(float * buf, unsigned sz) {
+  int ssp = sp;
   for (unsigned i = 0; i < sz; ++i) {
-    buf[i] = 0.25f * mult * (sfx_rand(ssp) - 0.5f);
+    buf[i] = 0.25f * sfx_env(sp, sfx_rand(ssp) - 0.5f);
     ssp++;
   }
   sp = ssp;
