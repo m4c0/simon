@@ -10,48 +10,35 @@ void sfx_win();
 
 #ifdef SFX_IMPL
 
+#include "gme.h"
+
+#include <math.h>
+
 static float sfx_rand_buf[1024];
 
-static unsigned sp = 0;
-static unsigned d = 1;
-
-float sfx_rand(unsigned ssp) {
-  return sfx_rand_buf[(ssp / 9) % 1024] * 2;
-}
-float sfx_sqr(unsigned ssp) {
-  return ((ssp / d) % 2);
+static float sfx_env(float ssp) {
+  if (ssp < 0.0) return 0;
+  if (ssp < 0.1) return ssp / 0.1f;
+  if (ssp < 1.0) return 1.0f - (ssp - 0.1f) / 0.9f;
+  return 0;
 }
 
-static float sfx_env(float ssp, float f) {
-  float mult;
-  if (ssp < 1000) {
-    mult = ssp / 1000.0f;
-  } else if (ssp < 2000) {
-    mult = 1.0;
-  } else if (ssp < 3000) {
-    mult = (3000 - ssp) / 1000.0f;
-  } else {
-    mult = 0;
-  }
-  return f * mult;
-}
-
+static int sfx_smp = 0;
 void sfx_filler(float * buf, unsigned sz) {
-  int ssp = sp;
-  for (unsigned i = 0; i < sz; ++i) {
-    buf[i] = 0.25f * sfx_env(sp, sfx_rand(ssp) - 0.5f);
-    ssp++;
-  }
-  sp = ssp;
-}
+  const gme_state_t * gme = gme_state();
 
-static void sfx_play(unsigned div) {
-  d = div;
-  sp = 0;
+  for (unsigned i = 0; i < sz; ++i) {
+    float t = (sfx_smp + i) / 44100.f;
+
+    float v = 0;
+    for (int i = 0; i < 4; i++) {
+      float dt = t - gme->anims[i];
+      v += sfx_env(dt) * sin(t * 440.f * 6.28f);
+    }
+    buf[i] = 0.25f * v;
+  }
+  sfx_smp += sz;
 }
-void sfx_move() { sfx_play(2); }
-void sfx_shuffle() {}
-void sfx_win() { sfx_move(); }
 
 void sfx_init() {
   for (int i = 0; i < 1024; i++) {

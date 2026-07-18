@@ -3,7 +3,7 @@
 
 typedef struct gme_state_s {
   float anims[4];
-  int gameover;
+  float gameover;
   int playback;
 } gme_state_t;
 
@@ -48,7 +48,7 @@ void gme_reset(void) {
   gme_hover = -1;
   gme_click = 0;
   gme_st.playback = 1;
-  gme_st.gameover = 0;
+  gme_st.gameover = -1e10;
 
   gme_set_timer(0.5);
 
@@ -59,7 +59,7 @@ void gme_tick(void) {
   int clicked = gme_click;
   gme_click = 0;
 
-  if (gme_st.gameover) return;
+  if (gme_st.gameover > 0) return;
 
   if (gme_timer > tim_now()) return;
 
@@ -85,7 +85,7 @@ void gme_tick(void) {
   gme_st.anims[gme_hover] = tim_now();
 
   if (gme_seq[gme_last_clicked] != gme_hover) {
-    gme_st.gameover = 1;
+    gme_st.gameover = tim_now();
     return;
   }
 
