@@ -29,9 +29,10 @@ extern HWND vlk_hwnd;
 
 typedef struct vlk_upc_s {
   float aspect_x, aspect_y;
-  float time;
   float playback;
+  float gameover;
   float anims[4];
+  float time;
 } vlk_upc_t;
 static vlk_upc_t vlk_pc;
 

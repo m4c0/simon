@@ -1,10 +1,11 @@
 #version 450
 
 layout(push_constant) uniform upc {
-  vec2 aspect;
-  float time;
+  vec2  aspect;
   float playback;
-  vec4 anims;
+  float gameover;
+  vec4  anims;
+  float time;
 } pc;
 
 layout(location=0) in vec2 f_pos;
