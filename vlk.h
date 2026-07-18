@@ -23,6 +23,8 @@ extern HWND vlk_hwnd;
 #include "Vulkan-Headers/include/vulkan/vulkan_core.h"
 
 #include "gme.h"
+#include "sfx.h"
+#include "snd.h"
 #include "tim.h"
 
 typedef struct vlk_upc_s {
@@ -569,6 +571,9 @@ void vlk_init(int surf) {
   vlk_create_pipeline();
 
   vlk_reset();
+
+  sfx_init();
+  snd_init(sfx_filler);
 }
 
 void vlk_deinit() {
@@ -592,6 +597,8 @@ void vlk_deinit() {
   vkDestroyDevice(vlk_dev, NULL);
   vkDestroySurfaceKHR(vlk_ins, vlk_surf, NULL);
   vkDestroyInstance(vlk_ins, NULL);
+
+  snd_deinit();
 }
 
 static void vlk_record(VkCommandBuffer cb) {
