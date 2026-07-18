@@ -11,7 +11,6 @@ void gme_mouse_down();
 
 #ifdef GME_IMPL
 
-#include <stdlib.h>
 #include "tim.h"
 
 #define GME_SEQ_SIZE 102400
