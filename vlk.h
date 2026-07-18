@@ -653,7 +653,10 @@ void vlk_frame() {
   if (!vlk_swc.swc) vlk_create_swc();
 
   gme_tick(vlk_pc.anims);
-  vlk_pc.playback = gme_is_playback();
+
+  const gme_state_t * gme = gme_state();
+  vlk_pc.playback = gme->playback;
+  vlk_pc.gameover = gme->gameover;
 
   unsigned inf = vlk_cur_inflight;
 

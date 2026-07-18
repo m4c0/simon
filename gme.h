@@ -1,11 +1,15 @@
 #ifndef GME_H
 #define GME_H
 
+typedef struct gme_state_s {
+  int gameover;
+  int playback;
+} gme_state_t;
+
 void gme_reset(float * anims);
 void gme_tick(float * anims);
 
-int gme_is_over();
-int gme_is_playback();
+const gme_state_t * gme_state();
 
 void gme_mouse_move(float px, float py);
 void gme_mouse_down();
@@ -19,18 +23,14 @@ void gme_mouse_down();
 static int gme_seq[GME_SEQ_SIZE];
 static int gme_streak;
 
-static int gme_gameover;
+static gme_state_t gme_st = {0};
+
 static int gme_last_played;
 static int gme_last_clicked;
-static int gme_replaying;
 static float gme_timer;
 
 static int gme_hover;
 static int gme_click;
-
-int gme_is_playback() {
-  return gme_replaying;
-}
 
 static void gme_set_timer(float t) {
   gme_timer = tim_now() + t;
@@ -46,8 +46,8 @@ void gme_reset(float * anims) {
   gme_last_played = 0;
   gme_hover = -1;
   gme_click = 0;
-  gme_replaying = 1;
-  gme_gameover = 0;
+  gme_st.playback = 1;
+  gme_st.gameover = 0;
 
   gme_set_timer(0.5);
 
@@ -59,14 +59,14 @@ void gme_tick(float * anims) {
   int clicked = gme_click;
   gme_click = 0;
 
-  if (gme_gameover) return;
+  if (gme_st.gameover) return;
 
   if (gme_timer > tim_now()) return;
 
-  if (gme_replaying) {
+  if (gme_st.playback) {
     if (gme_last_played >= gme_streak) {
       gme_last_clicked = 0;
-      gme_replaying = 0;
+      gme_st.playback = 0;
       return;
     }
 
@@ -86,7 +86,7 @@ void gme_tick(float * anims) {
 
   if (gme_seq[gme_last_clicked] != gme_hover) {
     gme_reset(anims);
-    gme_gameover = 1;
+    gme_st.gameover = 1;
     return;
   }
 
@@ -95,7 +95,7 @@ void gme_tick(float * anims) {
 
   gme_streak++;
   gme_hover = -1;
-  gme_replaying = 1;
+  gme_st.playback = 1;
   gme_last_played = 0;
   gme_set_timer(1.0);
 }
@@ -120,6 +120,8 @@ void gme_mouse_move(float px, float py) {
 void gme_mouse_down() {
   gme_click = 1;
 }
+
+const gme_state_t * gme_state() { return &gme_st; }
 
 #endif
 #endif
