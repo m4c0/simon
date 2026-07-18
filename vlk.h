@@ -33,6 +33,7 @@ typedef struct vlk_upc_s {
   float gameover;
   float anims[4];
   float time;
+  int   hover;
 } vlk_upc_t;
 static vlk_upc_t vlk_pc;
 
@@ -657,8 +658,9 @@ void vlk_frame() {
   const gme_state_t * gme = gme_state();
   vlk_pc.playback = gme->playback;
   vlk_pc.gameover = gme->gameover;
+  vlk_pc.hover    = gme->hover;
 
-  for (int i = 0; i < 4; i++) vlk_pc.anims[i] = gme->anims[i];
+  for (int i = 0; i < 4; i++) vlk_pc.anims[i] = gme->clicks[i];
 
   unsigned inf = vlk_cur_inflight;
 

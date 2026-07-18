@@ -2,10 +2,10 @@
 #define GME_H
 
 typedef struct gme_state_s {
-  float anims[4];
   float clicks[4];
   float gameover;
   int playback;
+  int hover;
 } gme_state_t;
 
 const gme_state_t * gme_state();
@@ -31,7 +31,6 @@ static int gme_last_played;
 static int gme_last_clicked;
 static float gme_timer;
 
-static int gme_hover;
 static int gme_click;
 
 static void gme_set_timer(float t) {
@@ -46,14 +45,14 @@ void gme_reset(void) {
   gme_streak = 1;
   gme_last_clicked = 0;
   gme_last_played = 0;
-  gme_hover = -1;
   gme_click = 0;
-  gme_st.playback = 1;
   gme_st.gameover = -1e10;
+  gme_st.playback = 1;
+  gme_st.hover = -1;
 
   gme_set_timer(0.5);
 
-  for (int i = 0; i < 4; i++) gme_st.anims[i] = gme_st.clicks[i] = -1e10;
+  for (int i = 0; i < 4; i++) gme_st.clicks[i] = -1e10;
 }
 
 void gme_tick(void) {
@@ -72,21 +71,19 @@ void gme_tick(void) {
     }
 
     int n = gme_seq[gme_last_played];
-    gme_st.anims[n] = gme_st.clicks[n] = tim_now();
+    gme_st.clicks[n] = tim_now();
     gme_last_played++;
     gme_set_timer(1.0);
     return;
   } 
 
-  if (gme_hover == -1) return;
-
-  gme_st.anims[gme_hover] = tim_now() - 0.15;
+  if (gme_st.hover == -1) return;
 
   if (!clicked) return;
 
-  gme_st.anims[gme_hover] = gme_st.clicks[gme_hover] = tim_now();
+  gme_st.clicks[gme_st.hover] = tim_now();
 
-  if (gme_seq[gme_last_clicked] != gme_hover) {
+  if (gme_seq[gme_last_clicked] != gme_st.hover) {
     gme_st.gameover = tim_now();
     return;
   }
@@ -95,25 +92,25 @@ void gme_tick(void) {
   if (gme_last_clicked < gme_streak) return;
 
   gme_streak++;
-  gme_hover = -1;
+  gme_st.hover = -1;
   gme_st.playback = 1;
   gme_last_played = 0;
   gme_set_timer(1.0);
 }
 
 void gme_mouse_move(float px, float py) {
-  gme_hover = -1;
+  gme_st.hover = -1;
   if (-0.9 < px && px < -0.1) {
     if (-0.9 < py && py < -0.1) {
-      gme_hover = 0;
+      gme_st.hover = 0;
     } else if (0.9 > py && py > 0.1) {
-      gme_hover = 2;
+      gme_st.hover = 2;
     }
   } else if (0.9 > px && px > 0.1) {
     if (-0.9 < py && py < -0.1) {
-      gme_hover = 1;
+      gme_st.hover = 1;
     } else if (0.9 > py && py > 0.1) {
-      gme_hover = 3;
+      gme_st.hover = 3;
     }
   }
 }

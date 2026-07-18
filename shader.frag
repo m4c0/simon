@@ -6,6 +6,7 @@ layout(push_constant) uniform upc {
   float gameover;
   vec4  anims;
   float time;
+  uint  hover;
 } pc;
 
 layout(location=0) in vec2 f_pos;
@@ -25,24 +26,24 @@ float anim_d(float a) {
   return 0.2 + 0.8 * 0.1 / abs(d);
 }
 
-vec4 c_sqr0(vec2 p, float anim) {
+vec4 c_sqr0(vec2 p, float anim, bool hover) {
   float d = sd_sqr(p);
-  float a = anim_d(anim);
+  float a = anim_d(anim) + (hover ? 0.2 : 0.0);
   return vec4(a, 0, 0, 1 - step(0, d));
 }
-vec4 c_sqr1(vec2 p, float anim) {
+vec4 c_sqr1(vec2 p, float anim, bool hover) {
   float d = sd_sqr(p);
-  float a = anim_d(anim);
+  float a = anim_d(anim) + (hover ? 0.2 : 0.0);
   return vec4(0, a, 0, 1 - step(0, d));
 }
-vec4 c_sqr2(vec2 p, float anim) {
+vec4 c_sqr2(vec2 p, float anim, bool hover) {
   float d = sd_sqr(p);
-  float a = anim_d(anim);
+  float a = anim_d(anim) + (hover ? 0.2 : 0.0);
   return vec4(0, 0, a, 1 - step(0, d));
 }
-vec4 c_sqr3(vec2 p, float anim) {
+vec4 c_sqr3(vec2 p, float anim, bool hover) {
   float d = sd_sqr(p);
-  float a = anim_d(anim);
+  float a = anim_d(anim) + (hover ? 0.2 : 0.0);
   return vec4(a, a, 0, 1 - step(0, d));
 }
 
@@ -51,10 +52,10 @@ void main() {
   
   vec3 bg = pc.playback > 0 ? vec3(0.1) : vec3(0.2);
 
-  vec4 c0 = c_sqr0(p - vec2(-0.5, -0.5), pc.anims.x);
-  vec4 c1 = c_sqr1(p - vec2(+0.5, -0.5), pc.anims.y);
-  vec4 c2 = c_sqr2(p - vec2(-0.5, +0.5), pc.anims.z);
-  vec4 c3 = c_sqr3(p - vec2(+0.5, +0.5), pc.anims.w);
+  vec4 c0 = c_sqr0(p - vec2(-0.5, -0.5), pc.anims.x, pc.hover == 0);
+  vec4 c1 = c_sqr1(p - vec2(+0.5, -0.5), pc.anims.y, pc.hover == 1);
+  vec4 c2 = c_sqr2(p - vec2(-0.5, +0.5), pc.anims.z, pc.hover == 2);
+  vec4 c3 = c_sqr3(p - vec2(+0.5, +0.5), pc.anims.w, pc.hover == 3);
   vec4 c = vec4(
       c0.rgb * c0.a +
       c1.rgb * c1.a +
