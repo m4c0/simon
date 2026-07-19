@@ -47,15 +47,23 @@ vec4 c_sqr3(vec2 p, float anim, bool hover) {
   return vec4(a, a, 0, 1 - step(0, d));
 }
 
+float gameover() {
+  float dt = pc.time - pc.gameover;
+  return step(0, dt) * (1 - step(1, dt));
+}
+
 void main() {
   vec2 p = f_pos;
   
   vec3 bg = pc.playback > 0 ? vec3(0.1) : vec3(0.2);
 
-  vec4 c0 = c_sqr0(p - vec2(-0.5, -0.5), pc.anims.x, pc.hover == 0);
-  vec4 c1 = c_sqr1(p - vec2(+0.5, -0.5), pc.anims.y, pc.hover == 1);
-  vec4 c2 = c_sqr2(p - vec2(-0.5, +0.5), pc.anims.z, pc.hover == 2);
-  vec4 c3 = c_sqr3(p - vec2(+0.5, +0.5), pc.anims.w, pc.hover == 3);
+  float go = gameover();
+  vec4 a = mix(pc.anims, vec4(pc.gameover), go);
+
+  vec4 c0 = c_sqr0(p - vec2(-0.5, -0.5), a.x, pc.hover == 0);
+  vec4 c1 = c_sqr1(p - vec2(+0.5, -0.5), a.y, pc.hover == 1);
+  vec4 c2 = c_sqr2(p - vec2(-0.5, +0.5), a.z, pc.hover == 2);
+  vec4 c3 = c_sqr3(p - vec2(+0.5, +0.5), a.w, pc.hover == 3);
   vec4 c = vec4(
       c0.rgb * c0.a +
       c1.rgb * c1.a +
