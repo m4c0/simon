@@ -26,30 +26,28 @@ float anim_d(float a) {
   return 0.2 + 0.8 * 0.1 / abs(d);
 }
 
-vec4 c_sqr0(vec2 p, float anim, bool hover) {
+vec4 c_sqr(vec2 p, vec3 c, float anim, bool hover) {
   float d = sd_sqr(p);
   float a = anim_d(anim) + (hover ? 0.2 : 0.0);
-  return vec4(a, 0, 0, 1 - step(0, d));
+  return vec4(c * a, 1 - step(0, d));
+}
+
+vec4 c_sqr0(vec2 p, float anim, bool hover) {
+  return c_sqr(p, vec3(1, 0, 0), anim, hover);
 }
 vec4 c_sqr1(vec2 p, float anim, bool hover) {
-  float d = sd_sqr(p);
-  float a = anim_d(anim) + (hover ? 0.2 : 0.0);
-  return vec4(0, a, 0, 1 - step(0, d));
+  return c_sqr(p, vec3(0, 1, 0), anim, hover);
 }
 vec4 c_sqr2(vec2 p, float anim, bool hover) {
-  float d = sd_sqr(p);
-  float a = anim_d(anim) + (hover ? 0.2 : 0.0);
-  return vec4(0, 0, a, 1 - step(0, d));
+  return c_sqr(p, vec3(0, 0, 1), anim, hover);
 }
 vec4 c_sqr3(vec2 p, float anim, bool hover) {
-  float d = sd_sqr(p);
-  float a = anim_d(anim) + (hover ? 0.2 : 0.0);
-  return vec4(a, a, 0, 1 - step(0, d));
+  return c_sqr(p, vec3(1, 1, 0), anim, hover);
 }
 
 float gameover() {
   float dt = pc.time - pc.gameover;
-  return step(0, dt) * (1 - step(1, dt));
+  return step(0, dt) * (1 - step(10, dt));
 }
 
 void main() {
