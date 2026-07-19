@@ -31,6 +31,7 @@ static int gme_last_played;
 static int gme_last_clicked;
 static float gme_timer;
 
+static int gme_hover;
 static int gme_click;
 
 static void gme_set_timer(float t) {
@@ -56,6 +57,7 @@ void gme_reset(void) {
 }
 
 void gme_tick(void) {
+  int hover = gme_hover;
   int clicked = gme_click;
   gme_click = 0;
 
@@ -77,13 +79,17 @@ void gme_tick(void) {
     return;
   } 
 
-  if (gme_st.hover == -1) return;
+  if (hover == -1) return;
 
-  if (!clicked) return;
+  if (!clicked) {
+    gme_st.hover = hover;
+    return;
+  }
 
-  gme_st.clicks[gme_st.hover] = tim_now();
+  gme_st.hover = -1;
+  gme_st.clicks[hover] = tim_now();
 
-  if (gme_seq[gme_last_clicked] != gme_st.hover) {
+  if (gme_seq[gme_last_clicked] != hover) {
     gme_st.gameover = tim_now();
     return;
   }
@@ -92,25 +98,24 @@ void gme_tick(void) {
   if (gme_last_clicked < gme_streak) return;
 
   gme_streak++;
-  gme_st.hover = -1;
   gme_st.playback = 1;
   gme_last_played = 0;
   gme_set_timer(1.0);
 }
 
 void gme_mouse_move(float px, float py) {
-  gme_st.hover = -1;
+  gme_hover = -1;
   if (-0.9 < px && px < -0.1) {
     if (-0.9 < py && py < -0.1) {
-      gme_st.hover = 0;
+      gme_hover = 0;
     } else if (0.9 > py && py > 0.1) {
-      gme_st.hover = 2;
+      gme_hover = 2;
     }
   } else if (0.9 > px && px > 0.1) {
     if (-0.9 < py && py < -0.1) {
-      gme_st.hover = 1;
+      gme_hover = 1;
     } else if (0.9 > py && py > 0.1) {
-      gme_st.hover = 3;
+      gme_hover = 3;
     }
   }
 }
