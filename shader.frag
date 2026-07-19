@@ -24,7 +24,14 @@ float sd_sqr(vec2 p) {
 vec4 c_sqr(vec2 p, vec3 c, float anim, bool hover) {
   float t = pc.time - anim;
 
-  float d = sd_sqr(p);
+  float damp = sin(t * 6.28 * 1.5) * (1 - t) * step(0, t) * (1 - step(1, t));
+
+  float ang = sin(anim) * damp * 0.05;
+  p = mat2(
+    cos(ang), sin(ang),
+    -sin(ang), cos(ang)
+  ) * p;
+  float d = sd_sqr(p) + damp * 0.05;
 
   float h = hover ? 0.2 : 0.0;
   float a = h + 0.2 + 0.8 * 0.1 / abs(t);
