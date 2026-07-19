@@ -15,6 +15,10 @@ void sfx_win();
 #include <math.h>
 
 static float sfx_rand_buf[1024];
+static float sfx_noise(float t) {
+  int i = (int)(440 * t * 1024);
+  return sfx_rand_buf[i % 1024];
+}
 
 static float sfx_env(float ssp) {
   if (ssp < 0.0) return 0;
@@ -31,7 +35,7 @@ void sfx_filler(float * buf, unsigned sz) {
   for (unsigned i = 0; i < sz; ++i) {
     float t = (sfx_smp + i) / 44100.f;
 
-    float v = 0;
+    float v = sfx_env(t - gme->gameover) * sfx_noise(t);
     for (int i = 0; i < 4; i++) {
       float dt = t - gme->clicks[i];
       float f = sfx_freqs[i];
