@@ -21,14 +21,14 @@ float sd_sqr(vec2 p) {
   return sd_box(p, vec2(0.3)) - 0.05;
 }
 
-float anim_d(float a) {
-  float d = pc.time - a;
-  return 0.2 + 0.8 * 0.1 / abs(d);
-}
-
 vec4 c_sqr(vec2 p, vec3 c, float anim, bool hover) {
+  float t = pc.time - anim;
+
   float d = sd_sqr(p);
-  float a = anim_d(anim) + (hover ? 0.2 : 0.0);
+
+  float h = hover ? 0.2 : 0.0;
+  float a = h + 0.2 + 0.8 * 0.1 / abs(t);
+
   return vec4(c * a, 1 - step(0, d));
 }
 
@@ -53,6 +53,8 @@ float gameover() {
 void main() {
   vec2 p = f_pos;
   
+  // TODO: relaxing bg image
+  // TODO: good vibe messages on player turn ("Be awesome!" etc)
   vec3 bg = pc.playback > 0 ? vec3(0.1) : vec3(0.2);
 
   float go = gameover();
