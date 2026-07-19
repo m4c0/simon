@@ -20,11 +20,14 @@ static float sfx_noise(float t) {
   return sfx_rand_buf[i % 1024];
 }
 
-static float sfx_env(float ssp) {
+static float sfx_env_note(float ssp) {
   if (ssp < 0.0) return 0;
   if (ssp < 0.1) return ssp / 0.1f;
   if (ssp < 1.0) return 1.0f - (ssp - 0.1f) / 0.9f;
   return 0;
+}
+static float sfx_env_noise(float ssp) {
+  return 0.0 < ssp && ssp < 1.0 ? 1.0 : 0.0;
 }
 
 static const float sfx_freqs[] = { 440.f, 523.25f, 392.f, 329.63f };
@@ -35,13 +38,14 @@ void sfx_filler(float * buf, unsigned sz) {
   for (unsigned i = 0; i < sz; ++i) {
     float t = (sfx_smp + i) / 44100.f;
 
-    float v = sfx_env(t - gme->gameover) * sfx_noise(t);
+    float acc = 0;
     for (int i = 0; i < 4; i++) {
-      float dt = t - gme->clicks[i];
       float f = sfx_freqs[i];
-      v += sfx_env(dt) * sin(t * f * 6.28f);
+      float note = sin(t * f * 6.28f) * sfx_env_note(t - gme->clicks[i]);
+      float noise = sfx_noise(t) * sfx_env_noise(t - gme->gameover);
+      acc += note * (1 - noise);
     }
-    buf[i] = 0.25f * v;
+    buf[i] = 0.25f * acc;
   }
   sfx_smp += sz;
 }
