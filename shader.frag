@@ -26,7 +26,7 @@ vec4 c_sqr(vec2 p, vec3 c, float anim, bool hover) {
 
   float damp = sin(t * 6.28 * 1.5) * (1 - t) * step(0, t) * (1 - step(1, t));
 
-  float ang = sin(anim) * damp * 0.05;
+  float ang = sin(anim * 10) * damp * 0.05;
   p = mat2(
     cos(ang), sin(ang),
     -sin(ang), cos(ang)
