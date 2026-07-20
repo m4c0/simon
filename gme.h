@@ -61,9 +61,12 @@ void gme_tick(void) {
   int clicked = gme_click;
   gme_click = 0;
 
-  if (gme_st.gameover > 0) return;
-
   if (gme_timer > tim_now()) return;
+
+  if (gme_st.gameover > 0) {
+    if (clicked) gme_reset();
+    return;
+  }
 
   if (gme_st.playback) {
     gme_hover = -1;
@@ -93,6 +96,7 @@ void gme_tick(void) {
 
   if (gme_seq[gme_last_clicked] != hover) {
     gme_st.gameover = tim_now();
+    gme_set_timer(1.0);
     return;
   }
 
