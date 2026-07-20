@@ -66,6 +66,8 @@ void gme_tick(void) {
   if (gme_timer > tim_now()) return;
 
   if (gme_st.playback) {
+    gme_hover = -1;
+
     if (gme_last_played >= gme_streak) {
       gme_last_clicked = 0;
       gme_st.playback = 0;
@@ -79,12 +81,12 @@ void gme_tick(void) {
     return;
   } 
 
-  if (hover == -1) return;
-
   if (!clicked) {
     gme_st.hover = hover;
     return;
   }
+
+  if (hover == -1) return;
 
   gme_st.hover = -1;
   gme_st.clicks[hover] = tim_now();
