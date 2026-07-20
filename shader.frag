@@ -34,9 +34,11 @@ vec4 c_sqr(vec2 p, vec3 c, float anim, bool hover) {
   float d = sd_sqr(p) + damp * 0.05;
 
   float h = hover ? 0.2 : 0.0;
-  float a = h + 0.2 + 0.8 * 0.1 / abs(t);
+  float v = h + 0.2 + 0.8 * 0.1 / abs(t);
+  c = mix(c * v, vec3(0), step(0, d));
 
-  return vec4(c * a, 1 - step(0, d));
+  float a = -tanh(d * 4.0 - 1.5) * 0.5 + 0.5;
+  return vec4(c, a);
 }
 
 vec4 c_sqr0(vec2 p, float anim, bool hover) {
