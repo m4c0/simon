@@ -76,6 +76,36 @@ vec3 c_bg() {
   return clamp(col - vec3(0.3, 0.35, 0.5), 0, 1) * 0.2;
 }
 
+// Variant of Inigo Quilez' segment
+float sd_segment(vec2 p, vec2 a, vec2 ba) {
+  vec2 pa = p - a;
+  float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+  return length(pa - ba * h);
+}
+// Variant of Inigo Quilez' arc
+float sd_arc(vec2 p, float a, float r) {
+  // sc is the sin/cos of the arc's aperture
+  vec2 sc = vec2(sin(a), cos(a));
+  p.x = abs(p.x);
+  return (sc.y * p.x > sc.x * p.y)
+    ? length(p - sc * r)
+    : abs(length(p) - r);
+}
+float sd_arrow(vec2 p) {
+  float t = pc.time;
+  p = mat2(cos(t), -sin(t), sin(t), cos(t)) * p;
+
+  const float r = 0.1;
+  const float a = 2.6; // Apperture angle
+  float d = sd_arc(p, a, r);
+
+  // Arrow head
+  p = mat2(cos(a), -sin(a), sin(a), cos(a)) * p;
+  d = min(d, sd_segment(p, vec2(0.0, r), vec2(0.2,  0.2) * r));
+  d = min(d, sd_segment(p, vec2(0.0, r), vec2(0.2, -0.4) * 0.7 * r));
+  return d;
+}
+
 void main() {
   vec2 p = f_pos;
   
@@ -99,6 +129,10 @@ void main() {
 
   float d = sd_board(p, a);
   c = mix(c, c_bg(), smoothstep(0, 0.015, d));
+
+  d = sd_arrow(p);
+  c = mix(vec3(0.0), c, smoothstep(0.01, 0.03, d));
+  c = mix(vec3(0.7), c, smoothstep(0.01, 0.013, d));
 
   colour = vec4(c, 1);
 }
