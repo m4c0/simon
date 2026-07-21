@@ -1,20 +1,15 @@
 #define APP "simon"
 
-#define CFLAGS "-g", "-IVulkan-Headers/include"
+// You can get this path with 'xcrun --show-sdk-path --sdk iphoneos'
+#define SDK_PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+#define TARGET "arm64-apple-ios26.0"
+
+#define CFLAGS "-g", "-IVulkan-Headers/include", "-O3", "-target", TARGET, "-isysroot", SDK_PATH
 #define RES_PATH "export.xcarchive/Products/Applications/"APP".app"
 #include "build.h"
 
 #include <sys/stat.h>
-#include <assert.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-
-// You can get this path with 'xcrun --show-sdk-path --sdk iphoneos'
-#define SDK_PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
-#define TARGET "arm64-apple-ios26.0"
 
 static char * slurp(const char * file) {
   FILE * f = fopen(file, "rb");
@@ -174,7 +169,7 @@ int main(int argc, char ** argv) {
 
   if (pch()) return 1;
 
-  RUN("clang", "-Wall", "-g", "-fmodules", "-o", "app.o", "-c", "app-ios.m");
+  RUN("clang", "-Wall", "-g", "-O3", "-fmodules", "-o", "app.o", "-c", "app-ios.m", "-target", TARGET, "-isysroot", SDK_PATH);
   if (compile_and_link_exe()) return 1;
   if (shaders()) return 1;
 
