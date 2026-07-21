@@ -130,7 +130,8 @@ void main() {
   float d = sd_board(p, a);
   c = mix(c, c_bg(), smoothstep(0, 0.015, d));
 
-  d = sd_arrow(p) + (1 - go);
+  float t = clamp(pc.time - pc.gameover, 0.0001, 1);
+  d = mix(1e10, sd_arrow(p) / t, go);
   c = mix(vec3(0.0), c, smoothstep(0.01, 0.03, d));
   c = mix(vec3(0.7), c, smoothstep(0.01, 0.013, d));
 
