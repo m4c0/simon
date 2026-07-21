@@ -85,9 +85,9 @@ void main() {
   float go = gameover();
   vec4 a = mix(pc.anims, vec4(pc.gameover), go);
 
-  vec4 c0 = c_sqr(p - vec2(-0.5, -0.5), vec3(1, 0, 0), a.x, pc.hover == 0);
-  vec4 c1 = c_sqr(p - vec2(+0.5, -0.5), vec3(0, 1, 0), a.y, pc.hover == 1);
-  vec4 c2 = c_sqr(p - vec2(-0.5, +0.5), vec3(0, 0, 1), a.z, pc.hover == 2);
+  vec4 c0 = c_sqr(p - vec2(-0.5, -0.5), vec3(0, 0, 1), a.x, pc.hover == 0);
+  vec4 c1 = c_sqr(p - vec2(+0.5, -0.5), vec3(1, 0, 1), a.y, pc.hover == 1);
+  vec4 c2 = c_sqr(p - vec2(-0.5, +0.5), vec3(1, 0, 0), a.z, pc.hover == 2);
   vec4 c3 = c_sqr(p - vec2(+0.5, +0.5), vec3(1, 1, 0), a.w, pc.hover == 3);
 
   vec3 c = mix(bg,
