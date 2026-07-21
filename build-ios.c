@@ -160,8 +160,7 @@ static int link_exe() {
     "-framework", "QuartzCore",
     "-framework", "UIKit",
     "-o", RES_PATH"/"APP, 
-    "sfx.o", "snd.o", "vlk.o",
-    "stb_image.o", "microui.o", "puzzle-ios.o",
+    OBJS, "app.o",
     "MoltenVK.xcframework/ios-arm64/libMoltenVK.a",
     "-lc++");
   return 0;
