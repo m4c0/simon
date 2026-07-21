@@ -7,13 +7,12 @@
 #include <sys/stat.h>
 
 static int pch() {
-  char * args[] = {
-    "clang", "-Wall", "-g", "-x", "c-header",
+  RUN("clang", "-Wall", "-g", "-x", "c-header",
     "-IVulkan-Headers/include",
     "-D", "VK_USE_PLATFORM_METAL_EXT",
     "-D", "VLK_USE_VOLK",
-    "-o", "pch.pch", "pch.h", 0 };
-  return run(args);
+    "-o", "pch.pch", "pch.h");
+  return 0;
 }
 
 static int link_exe() {

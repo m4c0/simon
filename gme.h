@@ -38,6 +38,7 @@ static void gme_set_timer(float t) {
   gme_timer = tim_now() + t;
 }
 
+// TODO: Reset might not be actually resetting everything
 void gme_reset(void) {
   srand(time(NULL));
   for (int i = 0; i < GME_SEQ_SIZE; i++) {
