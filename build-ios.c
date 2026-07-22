@@ -10,8 +10,11 @@
 
 #include <sys/stat.h>
 #include <string.h>
+#include <time.h>
 
 #define UPLOAD 0
+
+static time_t bundle_version;
 
 static char * slurp(const char * file) {
   FILE * f = fopen(file, "rb");
@@ -57,6 +60,8 @@ static int apply(char * src, char * tgt) {
       assert(fprintf(f, "&%s;", file));
     } else if (0 == strcmp(p, "IOS_APP_NAME")) {
       assert(fprintf(f, APP));
+    } else if (0 == strcmp(p, "IOS_BUNDLE_VERSION")) {
+      assert(fprintf(f, "%ld", bundle_version));
     } else if (0 == strcmp(p, "IOS_METHOD")) {
 #if UPLOAD
       assert(fprintf(f, "app-store-connect"));
@@ -172,6 +177,8 @@ static int link_exe() {
 }
 
 int main(int argc, char ** argv) {
+  bundle_version = time(NULL);
+
   mkdir("export.xcarchive", 0777);
   mkdir("export.xcarchive/Products", 0777);
   mkdir("export.xcarchive/Products/Applications", 0777);
