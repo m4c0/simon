@@ -650,9 +650,7 @@ static void vlk_record_cmdbuf(int i) {
   vkCmdEndRenderPass(cb);
   vkEndCommandBuffer(cb);
 }
-void vlk_frame() {
-  if (!vlk_swc.swc) vlk_create_swc();
-
+static void vlk_pre_frame() {
   gme_tick();
 
   const gme_state_t * gme = gme_state();
@@ -661,6 +659,11 @@ void vlk_frame() {
   vlk_pc.hover    = gme->hover;
 
   for (int i = 0; i < 4; i++) vlk_pc.anims[i] = gme->clicks[i];
+}
+void vlk_frame() {
+  if (!vlk_swc.swc) vlk_create_swc();
+
+  vlk_pre_frame();
 
   unsigned inf = vlk_cur_inflight;
 
@@ -734,6 +737,8 @@ void vlk_reset() {
 }
 
 void * vlk_headless(int w, int h) {
+  vlk_pre_frame();
+
   VkCommandBuffer cb;
   vlk_allocate_command_buffers(vlk_swc_count, &cb);
 
