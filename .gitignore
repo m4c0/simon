@@ -2,6 +2,7 @@ app
 build-droid
 build-ios
 build-osx
+export
 *.app
 *.dylib
 *.exe
@@ -11,4 +12,5 @@ build-osx
 *.plist
 *.res
 *.spv
+*.xcarchive
 *.xcframework
