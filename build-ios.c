@@ -11,6 +11,8 @@
 #include <sys/stat.h>
 #include <string.h>
 
+#define UPLOAD 0
+
 static char * slurp(const char * file) {
   FILE * f = fopen(file, "rb");
   assert(f);
@@ -53,6 +55,13 @@ static int apply(char * src, char * tgt) {
     char * env = getenv(p);
     if (strncmp(p, "IOS_", 4)) {
       assert(fprintf(f, "&%s;", file));
+      file = ++pp;
+    } else if (0 == strcmp(p, "IOS_METHOD")) {
+#if UPLOAD
+      assert(fprintf(f, "app-store-connect"));
+#else
+      assert(fprintf(f, "debugging"));
+#endif
       file = ++pp;
     } else if (env) {
       assert(fprintf(f, "%s", env));
@@ -181,11 +190,11 @@ int main(int argc, char ** argv) {
   if (codesign()) return 1;
   if (symbols())  return 1;
   if (export())   return 1;
-#if 1
-  if (install())  return 1;
-  if (validate("--validate-app")) return 1;
-#else
+#if UPLOAD
   if (validate("--upload-app")) return 1;
+#else
+  if (install()) return 1;
+  if (validate("--validate-app")) return 1;
 #endif
 
   return 0;

@@ -8,6 +8,7 @@ build-osx
 *.o
 *.pch
 *.pdb
+*.plist
 *.res
 *.spv
 *.xcframework
