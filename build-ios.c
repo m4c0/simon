@@ -132,7 +132,7 @@ static int install() {
     return 0;
   }
 
-  RUN("xcrun", "devicectl", "device", "install", "app", "--device", device, "export/puzzle.ipa");
+  RUN("xcrun", "devicectl", "device", "install", "app", "--device", device, "export/"APP".ipa");
   return 0;
 }
 
@@ -143,7 +143,7 @@ static int validate(char * verb) {
   assert(api_issuer && "Missing IOS_API_ISSUER environment variable");
 
   RUN("xcrun", "altool", verb, "-t", "iphoneos",
-    "-f", "export/puzzle.ipa",
+    "-f", "export/"APP".ipa",
     "--apiKey", strdup(api_key),
     "--apiIssuer", strdup(api_issuer));
   return 0;
