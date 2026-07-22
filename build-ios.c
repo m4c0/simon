@@ -55,21 +55,22 @@ static int apply(char * src, char * tgt) {
     char * env = getenv(p);
     if (strncmp(p, "IOS_", 4)) {
       assert(fprintf(f, "&%s;", file));
-      file = ++pp;
+    } else if (0 == strcmp(p, "IOS_APP_NAME")) {
+      assert(fprintf(f, APP));
     } else if (0 == strcmp(p, "IOS_METHOD")) {
 #if UPLOAD
       assert(fprintf(f, "app-store-connect"));
 #else
       assert(fprintf(f, "debugging"));
 #endif
-      file = ++pp;
     } else if (env) {
       assert(fprintf(f, "%s", env));
-      file = ++pp;
     } else {
       fprintf(stderr, "Missing environment: %s\n", p);
       exit(1);
     }
+
+    file = ++pp;
   }
 
   assert(fprintf(f, "%s", file));
