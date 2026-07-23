@@ -1,0 +1,22 @@
+name: build
+on: [push, pull_request]
+jobs:
+  build-windows:
+    runs-on: "windows-latest"
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - run: curl -L -o glslang.zip https://github.com/KhronosGroup/glslang/releases/download/main-tot/glslang-master-windows-Release.zip
+      - run: unzip glslang.zip bin/glslang.exe
+      - run: mv bin/glslang.exe .
+      - run: clang -Wall -g -o build.exe build-win.c
+      - run: ./build.exe
+      - uses: actions/upload-artifact@v7
+        with:
+          name: windows
+          path: memory.exe
+
