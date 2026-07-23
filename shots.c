@@ -2,9 +2,6 @@
 #include "stb_image_write.h"
 #include "vlk.h"
 
-#define W 1024
-#define H 1024
-
 unsigned vlk_open(const char * name, const char * ext, const void ** ptr) {
   char fname[1024];
 #ifdef _WIN32
@@ -38,12 +35,24 @@ HWND vlk_hwnd;
 void * vlk_metal_layer() { return NULL; }
 #endif
 
-int main() {
+void shot(unsigned w, unsigned h) {
+  char fn[1024];
+  snprintf(fn, 1024, "shot-%dx%d.png", w, h);
+
   vlk_init(0);
-
-  void * buf = vlk_headless(W, H);
-
+  void * buf = vlk_headless(w, h);
+  stbi_write_png(fn, w, h, 4, buf, w * 4);
   vlk_deinit();
+}
 
-  stbi_write_png("shot.png", W, H, 4, buf, W * 4);
+int main() {
+  // icon
+  shot(1024, 1024);
+
+  // apple store
+  shot(1260, 2736);
+  shot(1284, 2778);
+ 
+  // itch
+  shot(630, 500);
 }
